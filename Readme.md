@@ -3,7 +3,7 @@ Flexible ascii progress bar.
 ## Installation
 
 ```bash
-$ npm install progress
+$ npm install drorgl/progress
 ```
 
 ## Usage
@@ -12,11 +12,11 @@ First we create a `ProgressBar`, giving it a format string
 as well as the `total`, telling the progress bar when it will
 be considered complete. After that all we need to do is `tick()` appropriately.
 
-```javascript
-var ProgressBar = require('progress');
+```typescript
+import ProgressBar from "progress";
 
 var bar = new ProgressBar(':bar', { total: 10 });
-var timer = setInterval(function () {
+var timer = setInterval(() =>{
   bar.tick();
   if (bar.complete) {
     console.log('\ncomplete\n');
@@ -45,19 +45,29 @@ These are keys in the options object you can pass to the progress bar along with
 
 These are tokens you can use in the format of your progress bar.
 
-- `:bar` the progress bar itself
-- `:current` current tick number
-- `:total` total ticks
-- `:elapsed` time elapsed in seconds
-- `:percent` completion percentage
-- `:eta` estimated completion time in seconds
-- `:rate` rate of ticks per second
+ - `:bar` the progress bar itself
+ - `:current` current tick number
+ - `:currentKMG` current tick number in KMG format
+ - `:currentBKMG` current tick number in KMG bytes format
+ - `:total` total ticks
+ - `:totalKMG` total ticks in KMG format
+ - `:totalBKMG` total ticks in KMG bytes format
+ - `:elapsed` time elapsed in seconds
+ - `:elapsedShort` time elapsed in short dhms format
+ - `:elapsedFull` time elapsed in long dhms format
+ - `:percent` completion percentage
+ - `:eta` eta in seconds
+ - `:etaShort` eta in short dhms format
+ - `:etaFull` eta in long dhms format
+ - `:rate` rate of ticks per second
+ - `:rateKMG` rate of ticks per second in KMG format
+ - `:rateBKMG` rate of ticks per second in KMG bytes format
 
 ### Custom Tokens
 
 You can define custom tokens by adding a `{'name': value}` object parameter to your method (`tick()`, `update()`, etc.) calls.
 
-```javascript
+```typescript
 var bar = new ProgressBar(':current: :token1 :token2', { total: 3 })
 bar.tick({
   'token1': "Hello",
@@ -84,8 +94,8 @@ length which adjusts the progress bar appropriately relative to the total
 length.
 
 ```javascript
-var ProgressBar = require('progress');
-var https = require('https');
+import ProgressBar from "progress";
+import https from "https";
 
 var req = https.request({
   host: 'download.github.com',
@@ -125,8 +135,8 @@ downloading [=====             ] 39/bps 29% 3.7s
 ### Interrupt
 
 To display a message during progress bar execution, use `interrupt()`
-```javascript
-var ProgressBar = require('progress');
+```typescript
+import ProgressBar from "progress";
 
 var bar = new ProgressBar(':bar :current/:total', { total: 10 });
 var timer = setInterval(function () {
