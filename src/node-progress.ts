@@ -109,11 +109,21 @@ export interface IProgressBarOptions {
  *
  *   - `:bar` the progress bar itself
  *   - `:current` current tick number
+ *   - `:currentKMG` current tick number in KMG format
+ *   - `:currentBKMG` current tick number in KMG bytes format
  *   - `:total` total ticks
+ * 	 - `:totalKMG` total ticks in KMG format
+ * 	 - `:totalBKMG` total ticks in KMG bytes format
  *   - `:elapsed` time elapsed in seconds
+ *   - `:elapsedShort` time elapsed in short dhms format
+ *   - `:elapsedFull` time elapsed in long dhms format
  *   - `:percent` completion percentage
  *   - `:eta` eta in seconds
+ *   - `:etaShort` eta in short dhms format
+ *   - `:etaFull` eta in long dhms format
  *   - `:rate` rate of ticks per second
+ *   - `:rateKMG` rate of ticks per second in KMG format
+ *   - `:rateBKMG` rate of ticks per second in KMG bytes format
  *
  * @param {string} fmt
  * @param {object|number} options or total
@@ -134,7 +144,7 @@ export default class ProgressBar {
 	public chars: { complete: string; incomplete: string; head: string; };
 	public start: Date;
 	public complete: boolean;
-	constructor(fmt: string, options: number| IProgressBarOptions) {
+	constructor(fmt: string, options: number | IProgressBarOptions) {
 		this.stream = (options as IProgressBarOptions).stream || process.stderr;
 
 		if (typeof (options) === "number") {
@@ -238,12 +248,22 @@ export default class ProgressBar {
 		/* populate the bar template with percentages and timestamps */
 		let str = this.fmt
 			.replace(":current", this.curr.toString())
+			.replace(":currentKMG", this.formatKMGTPEZY(this.curr, 1000, 2))
+			.replace(":currentBKMG", this.formatKMGTPEZY(this.curr, 1024, 2))
 			.replace(":total", this.total.toString())
+			.replace(":totalKMG", this.formatKMGTPEZY(this.total, 1000, 2))
+			.replace(":totalBKMG", this.formatKMGTPEZY(this.total, 1024, 2))
 			.replace(":elapsed", isNaN(elapsed) ? "0.0" : (elapsed / 1000).toFixed(1))
+			.replace(":elapsedShort", isNaN(elapsed) ? "00:00:00" : this.dhmsFormatShort(this.secondsToDhms(elapsed / 1000)))
+			.replace(":elapsedFull", isNaN(elapsed) ? "" : this.dhmsFormatLong(this.secondsToDhms(elapsed / 1000)))
 			.replace(":eta", (isNaN(eta) || !isFinite(eta)) ? "0.0" : (eta / 1000)
 				.toFixed(1))
+			.replace(":etaShort", isNaN(elapsed) ? "00:00:00" : this.dhmsFormatShort(this.secondsToDhms((eta / 1000))))
+			.replace(":etaFull", isNaN(elapsed) ? "" : this.dhmsFormatLong(this.secondsToDhms((eta / 1000))))
 			.replace(":percent", percent.toFixed(0) + "%")
-			.replace(":rate", Math.round(rate).toString());
+			.replace(":rate", Math.round(rate).toString())
+			.replace(":rateKMG", this.formatKMGTPEZY(Math.round(rate), 1000, 2))
+			.replace(":rateBKMG", this.formatKMGTPEZY(Math.round(rate), 1024, 2));
 
 		/* compute the available space (non-zero) for the bar */
 		let availableSpace = Math.max(0, this.stream.columns - str.replace(":bar", "").length);
@@ -334,6 +354,57 @@ export default class ProgressBar {
 		} else {
 			this.stream.write("\n");
 		}
+	}
+
+	private formatKMGTPEZY(bytes: number, k: number = 1024, decimals: number = 2) {
+		if (bytes === 0) { return "0"; }
+
+		const dm = decimals < 0 ? 0 : decimals;
+		const sizes = ["", "K", "M", "G", "T", "P", "E", "Z", "Y"];
+
+		const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+		return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+	}
+
+	private secondsToDhms(seconds: number) {
+		seconds = Number(seconds);
+		const d = Math.floor(seconds / (3600 * 24));
+		const h = Math.floor(seconds % (3600 * 24) / 3600);
+		const m = Math.floor(seconds % 3600 / 60);
+		const s = Math.floor(seconds % 60);
+		return {
+			d,
+			h,
+			m,
+			s
+		};
+	}
+
+	private dhmsFormatLong(dhms: {d: number, h: number, m: number, s: number}) {
+		const {d, h, m, s} =    dhms;
+		const dDisplay = d > 0 ? d + (d === 1 ? " day, " : " days, ") : "";
+		const hDisplay = h > 0 ? h + (h === 1 ? " hour, " : " hours, ") : "";
+		const mDisplay = m > 0 ? m + (m === 1 ? " minute, " : " minutes, ") : "";
+		const sDisplay = s > 0 ? s + (s === 1 ? " second" : " seconds") : "";
+		return dDisplay + hDisplay + mDisplay + sDisplay;
+	}
+
+	private dhmsFormatShort(dhms: {d: number, h: number, m: number, s: number}) {
+		const {d, h, m, s} =    dhms;
+		const format = (val: number) => {
+			const stringified = Math.floor(val).toString();
+			if (stringified.length >= 2) {
+				return stringified;
+			}
+			const padded = `0${stringified}`;
+			return padded.slice(-2);
+		};
+
+		let parts = [d, h, m, s];
+		parts = parts.slice(parts.findIndex((p) => p > 0));
+
+		return parts.map(format).join(":");
 	}
 
 }

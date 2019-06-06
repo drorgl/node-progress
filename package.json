@@ -20,7 +20,8 @@
     "simple":"ts-node examples/simple.ts",
     "toolong":"ts-node examples/toolong.ts",
 
-
+    "time":"ts-node examples/time.ts",
+    "bpskbps":"ts-node examples/bpskbps.ts",
 
     "lint": "tslint --project .",
     "dryrun": "tsc -noEmit",
@@ -37,7 +38,8 @@
     "Christoffer Hallas <christoffer.hallas@gmail.com>",
     "Jordan Scales <scalesjordan@gmail.com>",
     "Andrew Rhyne <rhyneandrew@gmail.com>",
-    "Marco Brack <PapstDonB@Googlemail.com>"
+    "Marco Brack <PapstDonB@Googlemail.com>",
+    "Dror Gluska <drorgl@gmail.com>"
   ],
   "devDependencies": {
     "@types/node": "^12.0.5",
