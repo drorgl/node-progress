@@ -6,6 +6,28 @@
     "type": "git",
     "url": "git://github.com/visionmedia/node-progress"
   },
+  "main": "dist/node-progress.js",
+  "types": "dist/node-progress.d.ts",
+  "scripts": {
+    "backnforth":"ts-node examples/backnforth.ts",
+    "colors":"ts-node examples/colors.ts",
+    "customtokens":"ts-node examples/customtokens.ts",
+    "download":"ts-node examples/download.ts",
+    "exact":"ts-node examples/exact.ts",
+    "formats":"ts-node examples/formats.ts",
+    "interrupt":"ts-node examples/interrupt.ts",
+    "iterative":"ts-node examples/iterative.ts",
+    "simple":"ts-node examples/simple.ts",
+    "toolong":"ts-node examples/toolong.ts",
+
+
+
+    "lint": "tslint --project .",
+    "dryrun": "tsc -noEmit",
+    "build": "tsc",
+    "prepublish": "npm run lint && npm run dryrun",
+    "install": "npm run build"
+  },
   "keywords": [
     "cli",
     "progress"
@@ -17,8 +39,12 @@
     "Andrew Rhyne <rhyneandrew@gmail.com>",
     "Marco Brack <PapstDonB@Googlemail.com>"
   ],
-  "dependencies": {},
-  "main": "./index.js",
+  "devDependencies": {
+    "@types/node": "^12.0.5",
+    "ts-node": "^8.2.0",
+    "tslint": "^5.17.0",
+    "typescript": "^3.5.1"
+  },
   "engines": {
     "node": ">=0.4.0"
   },
