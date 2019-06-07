@@ -247,23 +247,28 @@ export default class ProgressBar {
 
 		/* populate the bar template with percentages and timestamps */
 		let str = this.fmt
-			.replace(":current", this.curr.toString())
-			.replace(":currentKMG", this.formatKMGTPEZY(this.curr, 1000, 2))
 			.replace(":currentBKMG", this.formatKMGTPEZY(this.curr, 1024, 2))
-			.replace(":total", this.total.toString())
-			.replace(":totalKMG", this.formatKMGTPEZY(this.total, 1000, 2))
+			.replace(":currentKMG", this.formatKMGTPEZY(this.curr, 1000, 2))
+			.replace(":current", this.curr.toString())
+
 			.replace(":totalBKMG", this.formatKMGTPEZY(this.total, 1024, 2))
-			.replace(":elapsed", isNaN(elapsed) ? "0.0" : (elapsed / 1000).toFixed(1))
+			.replace(":totalKMG", this.formatKMGTPEZY(this.total, 1000, 2))
+			.replace(":total", this.total.toString())
+
 			.replace(":elapsedShort", isNaN(elapsed) ? "00:00:00" : this.dhmsFormatShort(this.secondsToDhms(elapsed / 1000)))
 			.replace(":elapsedFull", isNaN(elapsed) ? "" : this.dhmsFormatLong(this.secondsToDhms(elapsed / 1000)))
-			.replace(":eta", (isNaN(eta) || !isFinite(eta)) ? "0.0" : (eta / 1000)
-				.toFixed(1))
+			.replace(":elapsed", isNaN(elapsed) ? "0.0" : (elapsed / 1000).toFixed(1))
+
 			.replace(":etaShort", isNaN(elapsed) ? "00:00:00" : this.dhmsFormatShort(this.secondsToDhms((eta / 1000))))
 			.replace(":etaFull", isNaN(elapsed) ? "" : this.dhmsFormatLong(this.secondsToDhms((eta / 1000))))
+			.replace(":eta", (isNaN(eta) || !isFinite(eta)) ? "0.0" : (eta / 1000)
+				.toFixed(1))
+
 			.replace(":percent", percent.toFixed(0) + "%")
-			.replace(":rate", Math.round(rate).toString())
+
+			.replace(":rateBKMG", this.formatKMGTPEZY(Math.round(rate), 1024, 2))
 			.replace(":rateKMG", this.formatKMGTPEZY(Math.round(rate), 1000, 2))
-			.replace(":rateBKMG", this.formatKMGTPEZY(Math.round(rate), 1024, 2));
+			.replace(":rate", Math.round(rate).toString());
 
 		/* compute the available space (non-zero) for the bar */
 		let availableSpace = Math.max(0, this.stream.columns - str.replace(":bar", "").length);
