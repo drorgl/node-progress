@@ -21,6 +21,7 @@
     "toolong": "ts-node examples/toolong.ts",
     "time": "ts-node examples/time.ts",
     "bpskbps": "ts-node examples/bpskbps.ts",
+    "noprogress":"ts-node examples/noprogress.ts",
     "lint": "tslint --project .",
     "dryrun": "tsc -noEmit",
     "build": "tsc",

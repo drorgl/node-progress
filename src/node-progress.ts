@@ -206,7 +206,7 @@ export default class ProgressBar {
 		this.render();
 
 		// progress complete
-		if (this.curr >= this.total) {
+		if (this.curr >= this.total && this.total !== 0) {
 			this.render(undefined, true);
 			this.complete = true;
 			this.terminate();
