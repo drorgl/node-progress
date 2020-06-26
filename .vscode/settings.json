@@ -17,9 +17,12 @@
         "dryrun",
         "gmail",
         "kbpsbps",
+        "noprogress",
+        "precommit",
         "rhyneandrew",
         "scalesjordan",
         "toolong",
+        "typedoc",
         "visionmedia"
     ]
 }
