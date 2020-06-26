@@ -3,7 +3,7 @@ Flexible ascii progress bar.
 ## Installation
 
 ```bash
-$ npm install drorgl/progress
+$ npm install @drorgl/progress
 ```
 
 ## Usage
@@ -13,7 +13,7 @@ as well as the `total`, telling the progress bar when it will
 be considered complete. After that all we need to do is `tick()` appropriately.
 
 ```typescript
-import ProgressBar from "progress";
+import ProgressBar from "@drorgl/progress";
 
 var bar = new ProgressBar(':bar', { total: 10 });
 var timer = setInterval(() =>{

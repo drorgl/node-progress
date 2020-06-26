@@ -1,10 +1,10 @@
 {
-  "name": "progress",
+  "name": "@drorgl/progress",
   "version": "2.0.3",
   "description": "Flexible ascii progress bar",
   "repository": {
     "type": "git",
-    "url": "git://github.com/visionmedia/node-progress"
+    "url": "git://github.com/drorgl/node-progress"
   },
   "main": "dist/node-progress.js",
   "types": "dist/node-progress.d.ts",
@@ -21,12 +21,15 @@
     "toolong": "ts-node examples/toolong.ts",
     "time": "ts-node examples/time.ts",
     "bpskbps": "ts-node examples/bpskbps.ts",
-    "noprogress":"ts-node examples/noprogress.ts",
+    "noprogress": "ts-node examples/noprogress.ts",
     "lint": "tslint --project .",
     "dryrun": "tsc -noEmit",
     "build": "tsc",
-    "prepublish": "npm run lint && npm run dryrun",
-    "install": "npm run build"
+    "build:clean": "rimraf ./dist",
+    "precommit": "npm run lint && npm run dryrun && npm run build",
+    "doc": "npm run doc:clean && typedoc --theme default --tsconfig tsconfig.json --plugin none",
+    "doc:clean": "rimraf ./docs/html",
+    "doc:markdown": "npm run doc:clean && typedoc --tsconfig tsconfig.json --plugin typedoc-plugin-markdown --theme markdown && concat-md --toc --decrease-title-levels --dir-name-as-title ./docs/html > ./docs/html/single-page.md"
   },
   "keywords": [
     "cli",
@@ -41,10 +44,14 @@
     "Dror Gluska <drorgl@gmail.com>"
   ],
   "devDependencies": {
-    "@types/node": "^12.0.5",
-    "ts-node": "^8.2.0",
-    "tslint": "^5.17.0",
-    "typescript": "^3.5.1"
+    "@types/node": "^14.0.14",
+    "concat-md": "^0.3.5",
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.10.2",
+    "tslint": "^6.1.2",
+    "typedoc": "^0.17.7",
+    "typedoc-plugin-markdown": "^2.3.1",
+    "typescript": "^3.9.5"
   },
   "engines": {
     "node": ">=0.4.0"

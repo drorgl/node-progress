@@ -3,3 +3,10 @@ test
 examples
 *.sock
 yarn.lock
+/.vscode
+/docs
+/src
+/Makefile
+/tsconfig.json
+/tslint.json
+/drorgl-progress-*.tgz
